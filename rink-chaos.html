@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>🏒 Rink Chaos</title>
+<link rel="stylesheet" href="rink-chaos.css">
+</head>
+<body>
+<div id="wrap">
+  <!-- Mobile joystick -->
+  <div id="mpad">
+    <div id="mpad-outer"><div id="mpad-inner"></div></div>
+  </div>
+  <!-- Mobile action buttons -->
+  <div id="mbtns">
+    <button class="mbtn act" id="mbtn-e">E</button>
+    <button class="mbtn red" id="mbtn-s">🏒</button>
+  </div>
+<canvas id="c"></canvas>
+<div id="hud">
+  <div class="hb"><span class="hl">SHIFT TIME</span><span class="hv t" id="ht">10:00</span></div>
+  <div class="hd"></div>
+  <div class="hb"><span class="hl">SCORE</span><span class="hv s" id="hs">000000</span></div>
+  <div class="hd"></div>
+  <div class="hb"><span class="hl">EARNINGS</span><span class="hv e" id="he">$0.00</span></div>
+  <div class="hd"></div>
+  <div class="bwrap">
+    <div class="br"><span class="bl">Rink Cond.</span><div class="bt"><div class="bf" id="brc" style="width:100%;background:#66BB6A"></div></div></div>
+    <div class="br"><span class="bl">Ice Quality</span><div class="bt"><div class="bf" id="biq" style="width:100%;background:#4FC3F7"></div></div></div>
+    <div class="br"><span class="bl">Chaos</span><div class="bt"><div class="bf" id="bch" style="width:0%;background:#EF5350"></div></div></div>
+    <div class="br"><span class="bl">Snow Tank</span><div class="bt"><div class="bf" id="bsn" style="width:0%;background:#4FC3F7"></div></div></div>
+  </div>
+  <div class="hd"></div>
+  <div class="hz"><span class="hl">LOCATION</span><div class="zn" id="hzn">—</div></div>
+</div>
+<div id="tp"></div>
+<div id="lp"><div class="lt">SHIFT LOG</div><div id="lpe"></div></div>
+<div id="ipr"><div class="pb" id="ipt"></div></div>
+<div id="sprintbar"><div class="spb-label">SPRINT [X]</div><div class="spb-track"><div class="spb-fill" id="spbf" style="width:100%"></div></div></div>
+<div id="fade"></div>
+<div id="roomflash"></div>
+<!-- Zamboni first-person canvas overlay -->
+<canvas id="zfpc" style="position:absolute;inset:0;display:none;width:100%;height:100%;"></canvas>
+
+<!-- MENU -->
+<div id="menusc">
+  <div class="mcard">
+    <div class="mlogo"><span class="mpuck">🏒</span><div class="mtitle">RINK CHAOS</div><div class="msub">ARENA OPERATIONS SIMULATOR</div></div>
+    <div class="mflavor">Drive the Zamboni. Haul trash. Scrub lockers. Serve the snack bar. Handle parent fights. Keep the rink running before your shift ends.</div>
+    <label class="mfl">WORKER NAME</label>
+    <input class="mni" id="ni" type="text" maxlength="16" placeholder="Enter your name..."/>
+    <div class="merr" id="ne"></div>
+    <button class="mbs" id="bstart">▶ START SHIFT</button>
+    <button class="mbg" onclick="showLB()">LEADERBOARD</button>
+    <div class="mkg">
+      <div class="mkr"><span class="mkb">WASD/ARROWS</span><span class="mkd">Walk around</span></div>
+      <div class="mkr"><span class="mkb">E</span><span class="mkd">Interact / Pick up</span></div>
+      <div class="mkr"><span class="mkb">X / SHIFT</span><span class="mkd">Sprint</span></div>
+      <div class="mkr"><span class="mkb">C</span><span class="mkd">Call police</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- SUMMARY -->
+<div id="sumsc">
+  <div class="scard">
+    <div class="stag">SHIFT COMPLETE</div>
+    <div class="sname" id="ssn"></div><div class="srat" id="ssr"></div><div class="sdur" id="ssd"></div>
+    <div class="sscores">
+      <div class="sbox" style="background:rgba(255,202,40,0.05);border-color:rgba(255,202,40,0.22);"><div class="sbl" style="color:rgba(255,202,40,0.6)">FINAL SCORE</div><div class="sbv" style="color:#FFCA28" id="sss"></div></div>
+      <div class="sbox" style="background:rgba(102,187,106,0.05);border-color:rgba(102,187,106,0.22);"><div class="sbl" style="color:rgba(102,187,106,0.6)">EARNINGS</div><div class="sbv" style="color:#66BB6A" id="sse"></div></div>
+    </div>
+    <div class="scl">RINK CONDITION AT END</div>
+    <div class="scb"><div class="scf" id="scbf"></div></div>
+    <div class="sct" id="sct"></div>
+    <div class="sstats" id="sst"></div>
+    <div class="sbtns"><button class="mbs" onclick="restartGame()">NEXT SHIFT</button><button class="mbg" onclick="showLB()">LEADERBOARD</button></div>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="lbsc">
+  <div class="lbw">
+    <div class="lbhd"><button class="mbg" style="width:auto;padding:6px 11px;" onclick="hideLB()">← BACK</button><div><div class="lbtt">🏒 LEADERBOARD</div><div class="lbst">SESSION HIGH SCORES</div></div></div>
+    <div class="lbtbl"><div class="lbth"><span>RANK</span><span>WORKER</span><span style="text-align:right">SCORE</span><span style="text-align:right">PAY</span><span style="text-align:right">TASKS</span></div><div id="lbrows"></div></div>
+  </div>
+</div>
+</div>
+
+<script src="rink-chaos.js"></script>
+</body>
+</html>
